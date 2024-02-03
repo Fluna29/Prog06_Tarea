@@ -135,7 +135,7 @@ public class Vehiculo {
     //Aquí hacemos un Override para la función toString() para que nos devuelva los valores deseados por mensaje.
     @Override
     public String toString() {
-        return "Vehiculo {" + "Marca=" + marca + "| Matricula =" + matricula + "| Precio =" + precio + "| Kilómetros =" + kilometros + "| Descripción =" + descripcion +" }";
+        return "Vehiculo {" + "Marca = " + marca + " | Matricula = " + matricula + " | Precio = " + precio + " | Kilómetros = " + kilometros + " | Descripción = " + descripcion +" }";
     }
 
 }

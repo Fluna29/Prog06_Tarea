@@ -43,10 +43,10 @@ public class Principal {
                             concesionario.listarVehiculos();
                             break;
                         case 3:
-                            
+                            buscarVehiculo();
                             break;
                         case 4:
-                            
+                            actualizaKms();
                             break;
                         case 5:
                             System.out.println("Hasta la próxima");
@@ -162,6 +162,60 @@ public class Principal {
             scanner.nextLine();
 
         }while(!dniValido);
+
+        vehiculo = new Vehiculo(marca, matricula, vehiculo.getKilometros(), fechaMatriculacion, descripcion, precio, nombrePropietario, vehiculo.getDniPropietario());
+
+        switch (concesionario.insertarVehiculo(vehiculo)) {
+            case -2:
+                System.out.println("\nEl vehículo ya existía anteriormente");
+                break;
+            case -1:
+                System.out.println("\nEl concesionario está lleno, \nno se puede insertar ningún coche en el concesionario");
+                break;
+            case 0:
+                System.out.println("\nEl vehículo ha sido insertado en el concesionario correctamente");
+                break;
+            default:
+            break;
+        }
+    }
+
+    public static void buscarVehiculo(){
+        System.out.println("\n==== Introduzca la matrícula del vehículo a buscar ====");
+        String matricula = scanner.nextLine();
+        scanner.nextLine();
+        vehiculo = concesionario.buscaVehiculo(matricula);
+
+        if(vehiculo != null){
+            System.out.println("Marca = " + vehiculo.getMarca());
+            System.out.println("\nMatricula = " + vehiculo.getMatricula());
+            System.out.println("\nPrecio = " + vehiculo.getPrecio());
+        }
+        scanner.nextLine();
+    }
+
+    public static void actualizaKms(){
+        boolean actualizaKmValido = false;
+
+        do {
+            System.out.println("==== Introduzca la matrícula del vehículo a actualizar ====");
+            String matricula = scanner.nextLine();
+            scanner.nextLine();
+
+            System.out.println("==== Introduzca la nueva cantidad de kilómetros ====");
+            double kilometros = scanner.nextDouble();
+            scanner.nextLine();
+            try {
+                if (concesionario.actualizaKms(matricula, kilometros)){
+                Validadores.validadorKilometros(kilometros);
+                System.out.println("Actualizados los kilómetros del vehículo con matrícula " + matricula);
+                actualizaKmValido = true;
+                }
+            } catch (IllegalArgumentException ex) {
+                
+            }
+        } while(!actualizaKmValido);
+        
     }
     
 }

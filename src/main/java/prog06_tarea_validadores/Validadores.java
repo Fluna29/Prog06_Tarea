@@ -40,6 +40,9 @@ public class Validadores {
         }
 
         //TODO: Validador de nombre del propietario
+    public static void validadorNombrePropietario (String nombrePropietario){
+        
+    }
 
 
         //TODO: Validador de matrículas del vehículo, que compruebe que el formato de matricula es correcto siendo N un numero entre 0000 y 9999 y L letra mayúscula cualquiera, NNNNLLL
