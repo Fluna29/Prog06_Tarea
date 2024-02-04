@@ -11,13 +11,21 @@ public class Concesionario {
     private Vehiculo[] vehiculos;
     private int numVehiculo;
 
-    //Aquí se crea un constructor vacío del Concesionario, donde declaramos el número inicial de vehículo y el tamaño de nuestro array.
+
+    /**
+     * Aquí se crea un constructor vacío del Concesionario, donde declaramos el número inicial de vehículo y el tamaño de nuestro array.
+     */
     public Concesionario (){
         this.numVehiculo = 0;
         this.vehiculos = new Vehiculo[50];
     }
-    //Recibe como parámetro una matrícula, buscar el vehículo en el concesionario y devuelve una cadena con los datos del vehículo o null si el vehículo buscado no existe.
+
+
+    /**
+     * Recibe como parámetro una matrícula, buscar el vehículo en el concesionario y devuelve una cadena con los datos del vehículo o null si el vehículo buscado no existe.     
+     */
     public Vehiculo buscaVehiculo (String matricula){
+        matricula = matricula.toUpperCase();
 
         for (int i = 0; i < numVehiculo; i++) {
             Vehiculo vehiculo = this.vehiculos[i];
@@ -28,6 +36,7 @@ public class Concesionario {
         }
         return null;
     }
+
 
     /** 
      * Recibe todos los datos de un vehículo y trata de insertarlo en el concesionario. 
@@ -44,19 +53,26 @@ public class Concesionario {
             return 0;
         }
     }
-    //Lista por pantalla los datos de todos los vehículos del concesionario.
+
+
+    /**
+     * Lista por pantalla los datos de todos los vehículos del concesionario.
+     */
     public void listarVehiculos(){
+        System.out.println("\n==== LISTA DE VEHÍCULOS DEL CONCESIONARIO ====\n");
         for (int i = 0; i < numVehiculo; i++) {
             Vehiculo vehiculo = this.vehiculos[i];
             System.out.println(vehiculo.toString());
         }
     }
+
+
     /** 
      *  Recibe por parámetro una matrícula y un número de kilómetros, busca el vehículo con la cuya matrícula coincida y actualiza sus kilómetros. 
      *  Devuelve true si se hizo con éxito y false en caso contrario.
      */
     public boolean actualizaKms (String matricula, double kilometros){
-
+        matricula = matricula.toUpperCase();
         for (int i = 0; i < numVehiculo; i++) {
             Vehiculo vehiculo = this.vehiculos[i];
 

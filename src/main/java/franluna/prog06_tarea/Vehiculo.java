@@ -48,6 +48,7 @@ public class Vehiculo {
         this.dniPropietario = "";
     }
 
+
     //Creamos el constructor del vehículo
     public Vehiculo (String marca, String matricula, double kilometros, LocalDate fechaMatriculacion, String descripcion, double precio, String nombrePropietario, String dniPropietario){
         this.marca = marca;
@@ -59,6 +60,7 @@ public class Vehiculo {
         this.nombrePropietario = nombrePropietario;
         this.dniPropietario = dniPropietario;
     }
+
 
     //A partir de aquí van los Getter y Setters de cada uno de los parámetros declarados anteriormente.
     public String getMarca(){
@@ -126,16 +128,18 @@ public class Vehiculo {
         this.dniPropietario = dniPropietario;
     }
 
+
     //Función para obtener los años de antigüedad
     public int getAnios(){
         Period aniosAntiguedad = Period.between(fechaMatriculacion, LocalDate.now());
         return aniosAntiguedad.getYears();
     }
 
+
     //Aquí hacemos un Override para la función toString() para que nos devuelva los valores deseados por mensaje.
     @Override
     public String toString() {
-        return "Vehiculo {" + "Marca = " + marca + " | Matricula = " + matricula + " | Precio = " + precio + " | Kilómetros = " + kilometros + " | Descripción = " + descripcion +" }";
+        return "Vehiculo {" + "Marca = " + marca + " | Matricula = " + matricula + " | Precio = " + precio + " | Kilómetros = " + kilometros + " | Descripción = " + descripcion +"}";
     }
 
 }

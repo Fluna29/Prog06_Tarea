@@ -2,7 +2,6 @@ package franluna.prog06_tarea;
 
 import java.time.LocalDate;
 import java.util.Scanner;
-import franluna.prog06_tarea.Concesionario;
 import prog06_tarea_validadores.Validadores;
 
 /**
@@ -16,7 +15,13 @@ public class Principal {
     public static Vehiculo vehiculo = null;
     static Scanner scanner = new Scanner(System.in);
     static LocalDate fechaMatriculacion = null;
-    public static Concesionario concesionario = new Concesionario();
+    static Concesionario concesionario = new Concesionario();
+    
+    /**
+     * En esta función main, ejecutamos nuestro programa,
+     * haciendo uso de llamadas a las diferentes funciones.
+     * @param args 
+     */
     public static void main(String[] args) {
 
         int eleccion;
@@ -30,36 +35,35 @@ public class Principal {
                 scanner.nextLine();
                 
             }else{
-                if (eleccion != 1 && vehiculo == null){
-                    System.out.println("\nERROR, antes de realizar cualquier acción debe crear un vehículo.");
-                    scanner.nextLine();
-                }else{
-    
-                    switch (eleccion) {
-                        case 1:
-                            crearVehiculo();
-                            break;
-                        case 2:
-                            concesionario.listarVehiculos();
-                            break;
-                        case 3:
-                            buscarVehiculo();
-                            break;
-                        case 4:
-                            actualizaKms();
-                            break;
-                        case 5:
-                            System.out.println("Hasta la próxima");
-                            break;
-                        default:
-                            System.out.println("ERROR");
-                            break;
-                    }
+                switch (eleccion) {
+                    case 1:
+                        crearVehiculo();
+                        break;
+                    case 2:
+                        concesionario.listarVehiculos();
+                        scanner.nextLine();
+                        break;
+                    case 3:
+                        buscarVehiculo();
+                        break;
+                    case 4:
+                        actualizaKms();
+                        break;
+                    case 5:
+                        System.out.println("Hasta la próxima");
+                        break;
+                    default:
+                        System.out.println("ERROR");
+                        break;
                 }
             } 
         }while (eleccion != 5);
     }
 
+    
+    /**
+     * Aquí hacemos el menú el apartado visual para llamarlo cada vez que vayamos a hacer uso del menú.
+     */
     private static void menuVisual(){
         System.out.println("\n----MENU----");
         System.out.println("1. Nuevo Vehículo");
@@ -70,9 +74,12 @@ public class Principal {
         System.out.println("\nIntroduzca una opción");
     }
 
-    //TODO: Cuando se acaben de ingresar todos los datos correctamente, se debe guardar este vehículo en concesionario. Hasta un máx de 50.
-    //Esta función la vamos a usar para ingresar todos los datos necesarios para crear el objeto Vehiculo.
+
+    /**
+     * Esta función la vamos a usar para ingresar todos los datos necesarios para crear el objeto Vehiculo.
+     */
     private static void crearVehiculo() {
+
         vehiculo = new Vehiculo();
 
         System.out.println("-----Ingrese los datos del vehículo:-----");
@@ -80,16 +87,27 @@ public class Principal {
         String marca = scanner.nextLine();
         vehiculo.setMarca(marca);
         
-        //TODO: Validador de matrículas del vehículo, que compruebe que el formato de matricula es correcto siendo N un numero entre 0000 y 9999 y L letra mayúscula cualquiera, NNNNLLL
-        System.out.println("\n==== Ingrese la matrícula del vehículo ====");
-        String matricula = scanner.nextLine();
-        vehiculo.setMatricula(matricula);
-        scanner.nextLine();
+
+        boolean matriculaValida = false;
+        do {
+            System.out.println("\n==== Ingrese la matrícula del vehículo ====");
+            String matricula = scanner.nextLine();
+            matricula = matricula.toUpperCase();
+
+            try {
+                Validadores.validadorMatricula(matricula);
+                matriculaValida = true;
+                vehiculo.setMatricula(matricula);
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getMessage());
+            }
+            scanner.nextLine();
+        } while (!matriculaValida);
         
 
         boolean kilometrosValidos = false;
         do{
-            System.out.println("\n ==== Ingrese los kilómetros del vehículo ====");
+            System.out.println("\n==== Ingrese los kilómetros del vehículo ====");
             double kilometros = scanner.nextDouble();
             
             try {  
@@ -141,11 +159,22 @@ public class Principal {
         vehiculo.setPrecio(precio);
         scanner.nextLine();
 
-        //TODO: Validador nombre del propietario con 1 nombre, 2 apellidos y no más de 40 caracteres
-        System.out.println("\n==== Ingrese el nombre del propietario del vehículo ====");
-        String nombrePropietario = scanner.nextLine();
-        vehiculo.setNombrePropietario(nombrePropietario);
-        scanner.nextLine();
+
+        boolean nombrePropietarioValido = false;
+        do {
+            System.out.println("\n==== Ingrese el nombre del propietario del vehículo ====");
+            String nombrePropietario = scanner.nextLine();
+
+            try {
+                Validadores.validadorNombrePropietario(nombrePropietario);
+                vehiculo.setNombrePropietario(nombrePropietario);
+                nombrePropietarioValido = true;
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getMessage());
+            }
+            scanner.nextLine();
+        } while (!nombrePropietarioValido);
+        
 
 
         boolean dniValido = false;
@@ -155,6 +184,7 @@ public class Principal {
                 try {
                 Validadores.validadorDni(dniPropietario);
                 dniValido = true;
+                dniPropietario = dniPropietario.toUpperCase();
                 vehiculo.setDniPropietario(dniPropietario);
                 } catch (IllegalArgumentException ex) {
                 System.out.println(ex.getMessage());
@@ -163,7 +193,7 @@ public class Principal {
 
         }while(!dniValido);
 
-        vehiculo = new Vehiculo(marca, matricula, vehiculo.getKilometros(), fechaMatriculacion, descripcion, precio, nombrePropietario, vehiculo.getDniPropietario());
+        vehiculo = new Vehiculo(vehiculo.getMarca(), vehiculo.getMatricula(), vehiculo.getKilometros(), vehiculo.getFechaMatriculacion(), vehiculo.getDescripcion(), vehiculo.getPrecio(), vehiculo.getNombrePropietario(), vehiculo.getDniPropietario());
 
         switch (concesionario.insertarVehiculo(vehiculo)) {
             case -2:
@@ -176,10 +206,17 @@ public class Principal {
                 System.out.println("\nEl vehículo ha sido insertado en el concesionario correctamente");
                 break;
             default:
-            break;
+                System.out.println("ERROR");
+                break;
         }
+        scanner.nextLine();
     }
 
+
+    /**
+     * Se solicitará al usuario una matrícula por teclado (no será necesario validarla) y se buscará en el concesionario un vehículo cuya matrícula coincida con la introducida.
+     * Si existe se mostrarán su marca, matrícula y precio por pantalla y en caso contrario el mensaje "No existe vehículo con la matrícula introducida".
+    */ 
     public static void buscarVehiculo(){
         System.out.println("\n==== Introduzca la matrícula del vehículo a buscar ====");
         String matricula = scanner.nextLine();
@@ -190,30 +227,37 @@ public class Principal {
             System.out.println("Marca = " + vehiculo.getMarca());
             System.out.println("\nMatricula = " + vehiculo.getMatricula());
             System.out.println("\nPrecio = " + vehiculo.getPrecio());
+        }else{
+            System.out.println("\nNo se ha encontrado ningún vehículo con esa matrícula.");
         }
         scanner.nextLine();
     }
 
+
+    /**
+     * Se solicitará al usuario por teclado una matrícula y un número de kilómetros. 
+     * Si el vehículo con esa matrícula existe, se actualizará su número de kms al valor introducido. 
+     * Si no existe, se mostrará un mensaje por pantalla.
+     */
     public static void actualizaKms(){
         boolean actualizaKmValido = false;
 
         do {
-            System.out.println("==== Introduzca la matrícula del vehículo a actualizar ====");
+            System.out.println("\n==== Introduzca la matrícula del vehículo a actualizar ====");
             String matricula = scanner.nextLine();
             scanner.nextLine();
 
             System.out.println("==== Introduzca la nueva cantidad de kilómetros ====");
             double kilometros = scanner.nextDouble();
             scanner.nextLine();
-            try {
-                if (concesionario.actualizaKms(matricula, kilometros)){
-                Validadores.validadorKilometros(kilometros);
-                System.out.println("Actualizados los kilómetros del vehículo con matrícula " + matricula);
+
+            if (concesionario.actualizaKms(matricula, kilometros)){
+                System.out.println("\nActualizados los kilómetros del vehículo con matrícula " + matricula);
                 actualizaKmValido = true;
-                }
-            } catch (IllegalArgumentException ex) {
-                
+            }else{
+                System.out.println("\nEsa matrícula no coincide con ningún vehículo");
             }
+            scanner.nextLine();
         } while(!actualizaKmValido);
         
     }
